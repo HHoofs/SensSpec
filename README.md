@@ -1,5 +1,5 @@
-Sensitivy and Speficity
-=======================
+Sensitivity and Specificity
+===========================
 
 Application
 -----------
