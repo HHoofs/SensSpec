@@ -3,7 +3,7 @@ shinyUI(
   pageWithSidebar(
     
     # Application title
-    headerPanel(" ~CAT",windowTitle="GettingThingsR"),
+    headerPanel("CAT: Sensitiviteit en specificiteit",windowTitle="GettingThingsR"),
     
     # Sidebar panel --------------------------------------------------------------
     sidebarPanel(
@@ -43,19 +43,26 @@ shinyUI(
       br(),
       # Uitleg in condional panel
       checkboxInput("uitleg",strong("Uitleg"),value=FALSE),
-                conditionalPanel(condition = paste("input.uitleg == true"),
-                                 "Voor een bepaalde ziekte zijn 21 personen gescreend met een nieuw instrument. De scores lopen van 0 t/m 105, waarbij een hogere score staat voor een grotere kans op de ziekte. In werkelijkheid hebben de groene personen de ziekte niet, en de rode personen wel. Het afkappunt kan (boven de figuur) worden verschoven om zodoende te kijken welke gevolgen dit heeft voor de sensitiviteit, specificiteit, NPV, en PPV. De optie Cell onder Populatie Figuur geeft de locatie van ieder persoon in de 2x2 tabel aan. De optie Classificatie toont aan of met het desbetreffende afkappunt een persoon juist of onjuist is geclassificeerd. De opties Invullen en Uitrekenen onder Tabel, tonen, respectievelijk, de aantallen in de 2x2 tabel en de bijbehorende sensitiviteit, specificiteit, NPV, en PPV waardes. De figuur rechtsonder geeft de ROC curve weer, waarbij de sensitiviteit en specificiteit van het gekozen afkappunt zijn omcirkeld. Bij condities kunnen verschillende situaties worden gekozen m.b.t. de prior kans van de ziekte en de kwaliteit van het instrument")
-      
-      
-      
+      conditionalPanel(condition = paste("input.uitleg == true"),
+                       "Voor een bepaalde ziekte zijn 21 personen gescreend met een nieuw instrument. De scores lopen van 0 t/m 105, waarbij een hogere score staat voor een grotere kans op de ziekte. In werkelijkheid hebben de groene personen de ziekte niet, en de rode personen wel. Het afkappunt kan (boven de figuur) worden verschoven om zodoende te kijken welke gevolgen dit heeft voor de sensitiviteit, specificiteit, NPV, en PPV. De optie Cell onder Populatie Figuur geeft de locatie van ieder persoon in de 2x2 tabel aan. De optie Classificatie toont aan of met het desbetreffende afkappunt een persoon juist of onjuist is geclassificeerd. De opties Invullen en Uitrekenen onder Tabel, tonen, respectievelijk, de aantallen in de 2x2 tabel en de bijbehorende sensitiviteit, specificiteit, NPV, en PPV waardes. De figuur rechtsonder geeft de ROC curve weer, waarbij de sensitiviteit en specificiteit van het gekozen afkappunt zijn omcirkeld. Bij condities kunnen verschillende situaties worden gekozen m.b.t. de prior kans van de ziekte en de kwaliteit van het instrument"),
+      checkboxInput("copy",strong("Copyright"),value=FALSE),
+      conditionalPanel(condition = paste("input.copy == true"),
+                       "The MIT License (MIT)",
+                       br(),br(),
+                       "Copyright (c) 2014 Huub",
+                       br(),br(),
+                       "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.",
+                       br(),br(),
+                       "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",       
+                       br(),br(),
+                       "Source code:",
+      HTML('<a href="https://github.com/HHoofs/SensSpec" target="_blank"><img src="http://www.wakanda.org/sites/default/files/blog/blog-github.png" alt="Github Directory" border="0"/></a>'))
     ),
     
     mainPanel(
       # Opmaakt html
       tags$head(
         tags$style(type="text/css", "li a{color: white;  background-color:#001C3D;}")
-        #         tags$style(type="text/css", ".active li a{color: black; font-weight:bold; background-color:black;}")
-        
       ),
       sliderInput("afkap", "",min=0, max=105, value=50, step=5,animate=TRUE),
       plotOutput("basefig",height = "250px"),
@@ -64,8 +71,27 @@ shinyUI(
         column(4,plotOutput("sens_form",height = "250px")),
         column(4,plotOutput("ROC",height = "250px"))
       )
-      #       column(12,textOutput("test"))
     )
   )
 )
 
+# # The MIT License (MIT)
+# # 
+# # Copyright (c) 2014 Huub
+# # 
+# # Permission is hereby granted, free of charge, to any person obtaining a copy of
+# # this software and associated documentation files (the "Software"), to deal in
+# # the Software without restriction, including without limitation the rights to
+# # use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+# # the Software, and to permit persons to whom the Software is furnished to do so,
+# # subject to the following conditions:
+# # 
+# # The above copyright notice and this permission notice shall be included in all
+# # copies or substantial portions of the Software.
+# # 
+# # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+# # FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+# # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
