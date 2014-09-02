@@ -34,7 +34,7 @@ shinyUI(
                 checkboxInput("PF_cor","Classificatie (X = Fout; V = Goed)",value = FALSE)
       ),
       # Opties voor tabel
-      wellPanel(strong("Tabel"),
+      wellPanel(strong("Tabel"), 
                 checkboxInput("TA_inv","Invullen",value=FALSE),
                 checkboxInput("TA_uit","Uitrekenen"),value=FALSE),
       # Plaatje UM
