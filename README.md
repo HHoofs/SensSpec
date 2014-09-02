@@ -9,6 +9,10 @@ Author
 ------
 Huub
 
+URL
+---
+[https://gettingthingsr.shinyapps.io/SensSpec/](https://gettingthingsr.shinyapps.io/SensSpec/)
+
 Sensitiviteit and Specificiteit
 ===============================
 
@@ -19,3 +23,7 @@ Voor een bepaalde ziekte zijn 21 personen gescreend met een nieuw instrument. De
 Auteur
 ------
 Huub
+
+URL
+---
+[https://gettingthingsr.shinyapps.io/SensSpec/](https://gettingthingsr.shinyapps.io/SensSpec/)
