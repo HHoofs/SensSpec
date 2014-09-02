@@ -11,8 +11,7 @@ Huub
 
 URL
 ---
-Direct: [https://gettingthingsr.shinyapps.io/SensSpec/](https://gettingthingsr.shinyapps.io/SensSpec/)
-
+Direct: [https://gettingthingsr.shinyapps.io/SensSpec/](https://gettingthingsr.shinyapps.io/SensSpec/)   
 Short: [http://goo.gl/zstb4i](http://goo.gl/zstb4i)
 
 Sensitiviteit and Specificiteit
@@ -28,5 +27,5 @@ Huub
 
 URL
 ---
-Direct: [https://gettingthingsr.shinyapps.io/SensSpec/](https://gettingthingsr.shinyapps.io/SensSpec/)
+Direct: [https://gettingthingsr.shinyapps.io/SensSpec/](https://gettingthingsr.shinyapps.io/SensSpec/)   
 Kort: [http://goo.gl/zstb4i](http://goo.gl/zstb4i)
