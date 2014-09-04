@@ -13,14 +13,38 @@ figure_table <- function(...){
   
   grid.text("Waarheid", vp = viewport(layout.pos.row = 1, layout.pos.col = 3:4))
   grid.text("Test", vp = viewport(layout.pos.row = 3:4, layout.pos.col = 1), rot=90)
-  grid.text("Test", vp = viewport(layout.pos.row = 3:4, layout.pos.col = 1), rot=90)
-  grid.text("Test", vp = viewport(layout.pos.row = 3:4, layout.pos.col = 1), rot=90)
   grid.text("+",      vp = viewport(layout.pos.row = 3, layout.pos.col = 2), rot=90)
   grid.text("-",      vp = viewport(layout.pos.row = 4, layout.pos.col = 2), rot=90)
   grid.text("Totaal", vp = viewport(layout.pos.row = 5, layout.pos.col = 2), rot=90)
   grid.text("+",      vp = viewport(layout.pos.row = 2, layout.pos.col = 3))
   grid.text("-",      vp = viewport(layout.pos.row = 2, layout.pos.col = 4))
   grid.text("Totaal", vp = viewport(layout.pos.row = 2, layout.pos.col = 5))
+  grid.text("A", vp = viewport(layout.pos.row = 3, layout.pos.col = 3),gp = gpar(alpha=.15,fontsize=70))
+  grid.text("B", vp = viewport(layout.pos.row = 3, layout.pos.col = 4),gp = gpar(alpha=.15,fontsize=70))
+  grid.text("C", vp = viewport(layout.pos.row = 4, layout.pos.col = 3),gp = gpar(alpha=.15,fontsize=70))
+  grid.text("D", vp = viewport(layout.pos.row = 4, layout.pos.col = 4),gp = gpar(alpha=.15,fontsize=70))
+  
+  grid.lines(x = unit(c(1/8, 1), "npc"), y = unit(c(.5, .5), "npc"))
+  grid.lines(x = unit(c(0, 1), "npc"),   y = unit(c(.75, .75), "npc"))
+  grid.lines(x = unit(c(0, 1), "npc"),   y = unit(c(.25, .25), "npc"))
+  grid.lines(x = unit(c(.25, .25), "npc"), y = unit(c(1, 0), "npc"))
+  grid.lines(x = unit(c(.5, .5), "npc"),   y = unit(c(7/8, 0), "npc"))
+  grid.lines(x = unit(c(.75, .75), "npc"), y = unit(c(1, 0), "npc"))
+}
+
+figure_table_eng <- function(...){
+  pushViewport(viewport(layout = grid.layout(nrow=5, ncol=5, 
+                                             widths  = unit(c( 1, 1, 2, 2, 2), "null"),
+                                             heights = unit(c( 1, 1, 2, 2, 2), "null"))))
+  
+  grid.text("Truth", vp = viewport(layout.pos.row = 1, layout.pos.col = 3:4))
+  grid.text("Test", vp = viewport(layout.pos.row = 3:4, layout.pos.col = 1), rot=90)
+  grid.text("+",      vp = viewport(layout.pos.row = 3, layout.pos.col = 2), rot=90)
+  grid.text("-",      vp = viewport(layout.pos.row = 4, layout.pos.col = 2), rot=90)
+  grid.text("Total", vp = viewport(layout.pos.row = 5, layout.pos.col = 2), rot=90)
+  grid.text("+",      vp = viewport(layout.pos.row = 2, layout.pos.col = 3))
+  grid.text("-",      vp = viewport(layout.pos.row = 2, layout.pos.col = 4))
+  grid.text("Total", vp = viewport(layout.pos.row = 2, layout.pos.col = 5))
   grid.text("A", vp = viewport(layout.pos.row = 3, layout.pos.col = 3),gp = gpar(alpha=.15,fontsize=70))
   grid.text("B", vp = viewport(layout.pos.row = 3, layout.pos.col = 4),gp = gpar(alpha=.15,fontsize=70))
   grid.text("C", vp = viewport(layout.pos.row = 4, layout.pos.col = 3),gp = gpar(alpha=.15,fontsize=70))
@@ -85,20 +109,20 @@ Perfect <- data.frame(Score = seq(from = 0, to = 100, by = 5) + 0.01,
                       Sick  = c(0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1))
 Perfect_rocT <- data.frame(sens = c(0,100,100),
                            spec = c(0,0,100)
-                           )
+)
 
 # Worse
 Worse <- data.frame(Score = seq(from = 0, to = 100, by = 5) + 0.01,
                     Sick  = c(1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0))
 Worse_rocT <- data.frame(sens = c(0,0,100),
                          spec = c(0,100,100)
-                         )
+)
 
 # # Empty Plot
 plot <- 
   ggplot(Normal, aes(x=Score, y=Sick), geom="blank") +
   theme_bw() +
-#   geom_line() + 
+  #   geom_line() + 
   scale_y_continuous(limits=c(0,1), breaks= NULL, 
                      labels=NULL, name="") +
   scale_x_continuous(limits=c(0,105),breaks=(seq(0,100,25)),expand=c(0,0),name="") +
@@ -112,6 +136,64 @@ plot <-
 
 # # Define server logic required to plot various variables against mpg
 shinyServer(function(input, output) {
+  
+  output$selectTitle <- renderPrint({
+    selOut <- "CAT: Sensitiviteit en Specificiteit"
+    if(input$lang == "eng") selOut <- "CAT: Sensitivity and Specificity"
+    cat(selOut)
+  })
+  
+  output$selectUIQual <- renderUI({ 
+    choices_qual <- c("Normaal" = "nor", "Prior Laag" = "priL", "Prior Hoog" = "priH", "Perfect" = "per", "Slecht" = "wor")
+    if(input$lang == "eng") choices_qual <- c("Normal" = "nor", "Prior Low" = "priL", "Prior High" = "priH", "Perfect" = "per", "Worse" = "wor")
+    selOut <- "Conditie"
+    if(input$lang == "eng") selOut <- "Condition"
+    selectInput("selfr", strong(selOut), choices = choices_qual)
+  })
+  
+  output$selectUIClass <- renderUI({ 
+    selOut <- "Classificatie"
+    if(input$lang == "eng")   selOut <- "Classification"
+    checkboxInput("PF_cor",selOut,value = FALSE)
+  })
+  
+  output$selectUIFil <- renderUI({ 
+    selOut <- "Invullen"
+    if(input$lang == "eng")   selOut <- "Fill"
+    checkboxInput("TA_inv",selOut,value=FALSE)
+  })
+  
+  output$selectUIComp <- renderUI({ 
+    selOut <- "Uitrekenen"
+    if(input$lang == "eng")   selOut <- "Compute"
+    checkboxInput("TA_uit",selOut,value=FALSE)
+  })
+  
+  output$selectHeaderTable <- renderPrint({
+    selOut <- "Tabel"
+    if(input$lang == "eng")   selOut <- "Table"
+    cat(paste("<b>",selOut,"</b>",sep=""))
+  })
+  
+  output$selectHeaderFigur <- renderPrint({
+    selOut <- "Figuur"
+    if(input$lang == "eng")   selOut <- "Figure"
+    cat(paste("<b>",selOut,"</b>",sep=""))
+  })
+  
+  output$selectExplainHeader <- renderPrint({
+    selOut <- "Uitleg"
+    if(input$lang == "eng") selOut <- "Explanation"
+    cat(paste("<b>",selOut,"</b>",sep=""))
+  })
+  
+  output$selectExplain <- renderPrint({
+    selOut <- "Voor een bepaalde ziekte zijn 21 personen gescreend met een nieuw instrument. De scores lopen van 0 t/m 105, waarbij een hogere score staat voor een grotere kans op de ziekte. In werkelijkheid hebben de groene personen de ziekte niet, en de rode personen wel. Het afkappunt kan (boven de figuur) worden verschoven om zodoende te kijken welke gevolgen dit heeft voor de sensitiviteit, specificiteit, NPV, en PPV. De optie Cell onder Figuur geeft de locatie van ieder persoon in de 2x2 tabel aan. De optie Classificatie toont aan of met het desbetreffende afkappunt een persoon juist of onjuist is geclassificeerd (X = Fout; V = Goed). De opties Invullen en Uitrekenen onder Tabel, tonen, respectievelijk, de aantallen in de 2x2 tabel en de bijbehorende sensitiviteit, specificiteit, NPV, en PPV waardes. De figuur rechtsonder geeft de ROC curve weer, waarbij de sensitiviteit en specificiteit van het gekozen afkappunt zijn omcirkeld. Bij condities kunnen verschillende situaties worden gekozen m.b.t. de prior kans van de ziekte en de kwaliteit van het instrument."
+    if(input$lang == "eng") selOut <- "For a particular disease 21 individuals are screened with a new instrument. The scores range from 0 to 105, where a higher score indicates a higher risk for the disease. In reality, the green people do not have the disease while the red people do The cut-off point may (above figure) be shifted in order to see what effect this has on the sensitivity, specificity, NPV and PPV. The Cell option under Figure shows the location of each person in the 2x2 table. The option Classification shows for the current cut-off point a person is classified correct or incorrect (X = Wrong; V = Good). The options Fill and Compute under the Table options, show, respectively, the numbers in the 2x2 table and the corresponding sensitivity, specificity, NPV and PPV values. The lower right figure shows the ROC curve, in which the sensitivity and specificity of the selected cutoff are circled. At conditions different situations can be selected with regard to the prior probability of the disease and the quality of the instrument."
+    cat(selOut)
+  })
+  
+  # # ACTUAL SHIZZLLE
   
   # # Data Frame Select
   selFrame <- reactive({
@@ -187,7 +269,8 @@ shinyServer(function(input, output) {
   # # 2x2 table figure
   output$tabfig <- renderPlot({
     # # Load empty grid 
-    figure_table()
+    if(input$lang == "dutch") figure_table()
+    if(input$lang == "eng")   figure_table_eng()
     # # Add numbers for each grid position
     if(input$TA_inv){
       grid.text(basictable()[1,1], gp = gpar(fontface = "bold", fontsize = 20), vp = viewport(layout.pos.row = 3, layout.pos.col = 3))
@@ -236,13 +319,19 @@ shinyServer(function(input, output) {
     # # init layout
     pushViewport(viewport(layout=gl))
     
+    Sensitiviteit <- "Sensitiviteit"
+    Specificiteit <- "Specificiteit"
+    
+    if(input$lang == "eng") Sensitiviteit <- "Sensitivity"
+    if(input$lang == "eng") Specificiteit <- "Specificity"
+    
     # # Only formulas
     if(!input$TA_uit){
       pushViewport(vp.1)
-      grid.text(bquote({plain(Sensitiviteit) == frac(A,A+C)}),x = 0, just = 0)
+      grid.text(bquote({plain(.(Sensitiviteit)) == frac(A,A+C)}),x = 0, just = 0)
       popViewport()
       pushViewport(vp.2)
-      grid.text(bquote({plain(Specificiteit) == frac(D,B+D)}),x = 0, just = 0)
+      grid.text(bquote({plain(.(Specificiteit)) == frac(D,B+D)}),x = 0, just = 0)
       popViewport()  
       pushViewport(vp.3)
       grid.text(bquote({plain(PPV) == frac(A,A+B)}),x = 0, just = 0)
@@ -253,10 +342,10 @@ shinyServer(function(input, output) {
     } else {
       # # Add solutions 
       pushViewport(vp.1)
-      grid.text(bquote({{plain(Sensitiviteit) == frac(A,A+C)}=={frac(.(basictable()[1,1]),.(basictable()[3,1]))}} == .(round(sens(),2))),x = 0, just = 0)
+      grid.text(bquote({{plain(.(Sensitiviteit)) == frac(A,A+C)}=={frac(.(basictable()[1,1]),.(basictable()[3,1]))}} == .(round(sens(),2))),x = 0, just = 0)
       popViewport()
       pushViewport(vp.2)
-      grid.text(bquote({{plain(Specificiteit) == frac(D,B+D)}=={frac(.(basictable()[2,2]),.(basictable()[3,2]))}} == .(round(spec(),2))),x = 0, just = 0)
+      grid.text(bquote({{plain(.(Specificiteit)) == frac(D,B+D)}=={frac(.(basictable()[2,2]),.(basictable()[3,2]))}} == .(round(spec(),2))),x = 0, just = 0)
       popViewport()  
       pushViewport(vp.3)
       grid.text(bquote({{plain(PPV) == frac(A,A+B)}=={frac(.(basictable()[1,1]),.(basictable()[1,3]))}} == .(round(ppv(),2))),x = 0, just = 0)
@@ -269,16 +358,23 @@ shinyServer(function(input, output) {
   
   # # ROC figure
   output$ROC <- renderPlot({
+    Specificiteit_lab <- "Specificiteit (%)"
+    Sensitiviteit_lab <- "Sensitiviteit (%)"
+    
+    if(input$lang == "eng") Specificiteit_lab <- "Sensitivity (%)"
+    if(input$lang == "eng") Sensitiviteit_lab <- "Specificity (%)"
+    
     roc_tab <- rocFrame()
     pplot <- ggplot(roc_tab[order(roc_tab$spec,roc_tab$sens),], aes(x=spec,y=sens)) + 
       geom_line() +
       geom_abline(intercept =0, slope =1,lty=2) +
       geom_point(x=(1-spec())*100, y=sens()*100) +
       geom_text(label = input$afkap, x=(1-spec())*100, y=sens()*100,vjust=1, hjust=0) +
-      scale_x_continuous(breaks=c(0,25,50,75,100), labels = c(100,75,50,25,0), name="Specificiteit (%)") +
-      scale_y_continuous(limits=c(-10,110),breaks=c(0,25,50,75,100), name="Sensitiviteit (%)")
+      scale_x_continuous(breaks=c(0,25,50,75,100), labels = c(100,75,50,25,0), name= Specificiteit_lab) +
+      scale_y_continuous(limits=c(-10,110),breaks=c(0,25,50,75,100), name= Sensitiviteit_lab)
     print(pplot)
   })
+
 })
 
 # # The MIT License (MIT)
